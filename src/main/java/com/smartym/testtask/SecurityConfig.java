@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-  private static final String[] REQUIRES_AUTHENTICATION = {"/payment/form"};
+  private static final String[] REQUIRES_AUTHENTICATION = {"/payment/pay"};
   private static final String[] WHITE_LIST = {"/payment/index", "/payment/success"};
 
   @Bean
@@ -26,7 +26,7 @@ public class SecurityConfig {
     http.authorizeHttpRequests()
         .antMatchers(WHITE_LIST)
         .permitAll()
-        .antMatchers(HttpMethod.GET, REQUIRES_AUTHENTICATION)
+        .antMatchers(HttpMethod.POST, REQUIRES_AUTHENTICATION)
         .authenticated()
         .and()
         .oauth2Login()

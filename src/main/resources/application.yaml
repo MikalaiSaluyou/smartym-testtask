@@ -1,0 +1,30 @@
+server:
+  port: 8080
+  forward-headers-strategy: native
+  error:
+    whitelabel:
+      enabled: false
+
+logging:
+  level:
+    root: trace
+base:
+  url: "http://test.devenv.smartym.by/"
+
+
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          smartym:
+            authorization-uri: "http://test.devenv.smartym.by/signin"
+            token-uri: "http://test.devenv.smartym.by/token?scope=aisp,cbpii,pisp"
+        registration:
+          smartym:
+            client-authentication-method: "client_secret_post"
+            client-id: "HKGzRFKpSVjSpTPQ"
+            client-secret: "ovnLjsKEEciCxjwmeHZSB"
+            authorization-grant-type: "authorization_code"
+            scope: "aisp,cbpii,pisp"
+            redirect-uri: "http://localhost:8080/payment/form"

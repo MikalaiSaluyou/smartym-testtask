@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Page</title>
+    <style>
+        label { display: table-cell; text-align: right}
+        input { display: table-cell; }
+    </style>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/payment/pay}" th:object="${paymentDTO}" >
+    <label for="creditorIban" >Enter IBAN: </label>
+    <input type="text" th:field="*{creditorIban}" id="creditorIban">
+    <br/><br/>
+    <label for="creditorIban" >Enter Creditor Name: </label>
+    <input type="text" th:field="*{creditorName}" id="creditorName">
+    <br/><br/>
+    <label for="creditorIban" >Enter amount: </label>
+    <input type="text" th:field="*{amount}" id="amount">
+    <br/><br/>
+    <label for="creditorIban" >Enter currency: </label>
+    <input type="text" th:field="*{currency}" id="currency">
+    <br/><br/>
+    <label for="creditorIban" >Enter description: </label>
+    <input type="text" th:field="*{description}" id="description">
+    <br/><br/>
+    <input type="submit" value="Submit"/>
+</form>
+
+</body>
+</html>

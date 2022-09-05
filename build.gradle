@@ -1,0 +1,78 @@
+import java.nio.charset.StandardCharsets
+
+plugins {
+  id 'org.springframework.boot' version '2.7.3'
+  id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+  id 'com.diffplug.spotless' version '6.4.2'
+  id 'java'
+}
+
+group = 'com.smartym'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories { mavenCentral() }
+
+dependencies {
+  implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+  implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+
+  implementation 'org.modelmapper:modelmapper:3.1.0'
+  implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+  implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+  implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
+
+  implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.6.8'
+
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+spotless {
+  encoding = StandardCharsets.UTF_8
+  lineEndings = 'UNIX'
+  groovyGradle {
+    greclipse('4.6.3')
+    trimTrailingWhitespace()
+    endWithNewline()
+    indentWithSpaces(2)
+  }
+  java {
+    target fileTree(rootDir) {
+      include '**/*.java'
+      exclude "build/generated/sources/annotationProcessor/**/*.*"
+      exclude "build/generated-test-sources/**/*.*"
+    }
+    googleJavaFormat('1.7')
+  }
+  format 'misc', {
+    target fileTree(rootDir) {
+      include '**/*.groovy'
+      include '**/*.json'
+      include '**/*.md'
+      include '**/*.sh'
+      include '**/*.tf'
+      include '**/*.xml'
+      include '**/*.yaml'
+      include '**/*.yml'
+      include '**/Dockerfile*'
+      include '**/Jenkinsfile*'
+      include 'License'
+      include '.gitignore'
+      exclude '.idea'
+      exclude '.gradle'
+      exclude 'build'
+      exclude 'terraform/.terraform'
+    }
+    trimTrailingWhitespace()
+    endWithNewline()
+    indentWithSpaces(2)
+  }
+}
+
+spotlessJava {
+  dependsOn(compileJava, processResources, spotlessGroovyGradle, spotlessMisc)
+}
+
+tasks.named('test') { useJUnitPlatform() }

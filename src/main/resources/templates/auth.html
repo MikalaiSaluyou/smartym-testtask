@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>Auth Page</title>
+
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/payment/token}" th:object="${authDTO}" >
+    <label for="code" >Code: </label>
+    <input type="text" th:value="${code}" th:attr="name=code" id="codeVal" size="40">
+    <br/><br/>
+    <input type="submit" value="Get token"/>
+</form>
+
+</body>
+</html>

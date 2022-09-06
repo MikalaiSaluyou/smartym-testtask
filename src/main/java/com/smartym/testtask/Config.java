@@ -54,4 +54,22 @@ public class Config {
   public ModelMapper modelMapper() {
     return new ModelMapper();
   }
+
+  /* @Bean
+  public OAuth2AuthorizedClientManager authorizedClientManager(
+      final ClientRegistrationRepository clientRegistrationRepository,
+      final OAuth2AuthorizedClientRepository authorizedClientRepository) {
+
+    final OAuth2AuthorizedClientProvider authorizedClientProvider =
+        OAuth2AuthorizedClientProviderBuilder.builder()
+            .authorizationCode()
+            .build();
+
+    final DefaultOAuth2AuthorizedClientManager authorizedClientManager =
+        new DefaultOAuth2AuthorizedClientManager(
+            clientRegistrationRepository, authorizedClientRepository);
+    authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
+
+    return authorizedClientManager;
+  }*/
 }

@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.time.Instant;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -52,23 +50,37 @@ public class PaymentController {
   }
 
   @GetMapping("/form")
-  public String getPaymentForm(@ModelAttribute("paymentDTO") final PaymentDTO paymentDTO) {
+  public String getPaymentForm(
+      @ModelAttribute("paymentDTO") final PaymentDTO paymentDTO,
+      final OAuth2AuthenticationToken authenticationToken) {
+
+    return "payment";
+  }
+
+  @GetMapping("/pay")
+  public String getPaymentPay(
+          @ModelAttribute("paymentDTO") final PaymentDTO paymentDTO,
+          final OAuth2AuthenticationToken authenticationToken) {
+
+    System.out.println(authenticationToken);
 
     return "payment";
   }
 
   @PostMapping("/pay")
-  public String postPayment(@ModelAttribute("paymentDTO") final PaymentDTO paymentDTO)
+  public String postPayment(
+      @ModelAttribute("paymentDTO") final PaymentDTO paymentDTO,
+      final OAuth2AuthenticationToken authenticationToken)
       throws IOException {
 
-    final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    final OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
-
-    final OAuth2AuthorizedClient client =
-        oAuth2AuthorizedClientService.loadAuthorizedClient(
-            oauthToken.getAuthorizedClientRegistrationId(), oauthToken.getName());
-    final String accessToken = client.getAccessToken().getTokenValue();
+    String accessToken = "";
+    if (authenticationToken != null) {
+      final OAuth2AuthorizedClient client =
+          oAuth2AuthorizedClientService.loadAuthorizedClient(
+              authenticationToken.getAuthorizedClientRegistrationId(),
+              authenticationToken.getName());
+      accessToken = client.getAccessToken().getTokenValue();
+    }
 
     /*
      * Here I build a dummy request that differs from the Swagger payload model. 'pis-controller' accepts any kind of request

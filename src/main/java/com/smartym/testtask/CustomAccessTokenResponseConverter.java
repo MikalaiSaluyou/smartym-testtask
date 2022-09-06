@@ -15,19 +15,24 @@ import org.springframework.util.StringUtils;
 
 public class CustomAccessTokenResponseConverter
     implements Converter<Map<String, Object>, OAuth2AccessTokenResponse> {
+  private static final String ACCESS_TOKEN = "accessToken";
+  private static final String TOKEN_TYPE = "tokenType";
+  private static final String EXPIRES_IN = "expiresIn";
+  private static final String REFRESH_TOKEN = "refreshToken";
+
   private static final Set<String> TOKEN_RESPONSE_PARAMETER_NAMES =
-      Stream.of("accessToken", "tokenType", "expiresIn", "refreshToken", "scope")
+      Stream.of(ACCESS_TOKEN, TOKEN_TYPE, EXPIRES_IN, REFRESH_TOKEN, OAuth2ParameterNames.SCOPE)
           .collect(Collectors.toSet());
 
   @Override
   public OAuth2AccessTokenResponse convert(final Map<String, Object> tokenResponseParameters) {
-    final String accessToken = (String) tokenResponseParameters.get("accessToken");
+    final String accessToken = (String) tokenResponseParameters.get(ACCESS_TOKEN);
     final OAuth2AccessToken.TokenType accessTokenType = OAuth2AccessToken.TokenType.BEARER;
 
     long expiresIn = 0;
-    if (tokenResponseParameters.containsKey("expiresIn")) {
+    if (tokenResponseParameters.containsKey(EXPIRES_IN)) {
       try {
-        expiresIn = Long.parseLong((String) tokenResponseParameters.get("expiresIn"));
+        expiresIn = Long.parseLong((String) tokenResponseParameters.get(EXPIRES_IN));
       } catch (NumberFormatException ignored) {
       }
     }

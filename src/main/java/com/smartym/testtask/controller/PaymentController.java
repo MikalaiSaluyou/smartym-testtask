@@ -6,7 +6,6 @@ import com.smartym.testtask.model.PaymentRequest;
 import com.smartym.testtask.service.PaymentService;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -50,11 +49,7 @@ public class PaymentController {
       @RegisteredOAuth2AuthorizedClient("smartym")
           final OAuth2AuthorizedClient oAuth2AuthorizedClient)
       throws IOException {
-    final String accessToken =
-        Optional.ofNullable(oAuth2AuthorizedClient)
-            .map(p -> p.getAccessToken().getTokenValue())
-            .orElse("");
-
+    final String accessToken = oAuth2AuthorizedClient.getAccessToken().getTokenValue();
     /*
      * Here I build a dummy request that differs from the Swagger payload model. 'pis-controller' accepts any kind of request
      * body, so just for sake of time I decided to simplify the solution that way.

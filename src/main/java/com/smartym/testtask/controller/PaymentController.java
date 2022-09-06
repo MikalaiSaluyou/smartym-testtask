@@ -6,11 +6,11 @@ import com.smartym.testtask.model.PaymentRequest;
 import com.smartym.testtask.service.PaymentService;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/payment")
@@ -26,16 +25,10 @@ public class PaymentController {
   private final PaymentService paymentService;
   private final ModelMapper modelMapper;
 
-  private final OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
-
   @Autowired
-  public PaymentController(
-      final PaymentService paymentService,
-      ModelMapper modelMapper,
-      OAuth2AuthorizedClientService oAuth2AuthorizedClientService) {
+  public PaymentController(final PaymentService paymentService, ModelMapper modelMapper) {
     this.paymentService = paymentService;
     this.modelMapper = modelMapper;
-    this.oAuth2AuthorizedClientService = oAuth2AuthorizedClientService;
   }
 
   @GetMapping("/index")
@@ -43,26 +36,10 @@ public class PaymentController {
     return "index";
   }
 
-  @GetMapping("/auth")
-  public String getPayment(@RequestParam("code") final String code, final Model model) {
-    model.addAttribute("code", code);
-    return "auth";
-  }
-
   @GetMapping("/form")
   public String getPaymentForm(
       @ModelAttribute("paymentDTO") final PaymentDTO paymentDTO,
-      final OAuth2AuthenticationToken authenticationToken) {
-
-    return "payment";
-  }
-
-  @GetMapping("/pay")
-  public String getPaymentPay(
-          @ModelAttribute("paymentDTO") final PaymentDTO paymentDTO,
-          final OAuth2AuthenticationToken authenticationToken) {
-
-    System.out.println(authenticationToken);
+      @RegisteredOAuth2AuthorizedClient("smartym") final OAuth2AuthorizedClient authorizedClient) {
 
     return "payment";
   }
@@ -70,17 +47,13 @@ public class PaymentController {
   @PostMapping("/pay")
   public String postPayment(
       @ModelAttribute("paymentDTO") final PaymentDTO paymentDTO,
-      final OAuth2AuthenticationToken authenticationToken)
+      @RegisteredOAuth2AuthorizedClient("smartym")
+          final OAuth2AuthorizedClient oAuth2AuthorizedClient)
       throws IOException {
-
-    String accessToken = "";
-    if (authenticationToken != null) {
-      final OAuth2AuthorizedClient client =
-          oAuth2AuthorizedClientService.loadAuthorizedClient(
-              authenticationToken.getAuthorizedClientRegistrationId(),
-              authenticationToken.getName());
-      accessToken = client.getAccessToken().getTokenValue();
-    }
+    final String accessToken =
+        Optional.ofNullable(oAuth2AuthorizedClient)
+            .map(p -> p.getAccessToken().getTokenValue())
+            .orElse("");
 
     /*
      * Here I build a dummy request that differs from the Swagger payload model. 'pis-controller' accepts any kind of request

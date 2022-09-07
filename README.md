@@ -12,3 +12,5 @@ Current workflow has the following steps:
  - When user pressing `New payment` link, application starting authorization process against `Smartym bank simulation`;
  - After a successful authorization user is redirected to the `payment page` with an input for Creditor IBAN, Creditor Name, amount, currency, description and `submit` button;
  - When user pressing the `submit` button, then application sends a payment request using `accessToken`;
+
+To simplify the solution no validation of input params were added.

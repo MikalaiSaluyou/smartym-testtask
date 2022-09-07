@@ -1,4 +1,4 @@
-package com.smartym.testtask;
+package com.smartym.testtask.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Configuration
 @EnableWebSecurity
-public class Config {
+public class WebConfig {
 
   @Value("${base.url}")
   private String baseUrl;

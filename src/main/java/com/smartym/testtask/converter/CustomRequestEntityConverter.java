@@ -1,4 +1,4 @@
-package com.smartym.testtask;
+package com.smartym.testtask.converter;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.RequestEntity;

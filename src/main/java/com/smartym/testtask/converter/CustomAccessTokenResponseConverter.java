@@ -1,4 +1,4 @@
-package com.smartym.testtask;
+package com.smartym.testtask.converter;
 
 import java.util.Arrays;
 import java.util.Collections;

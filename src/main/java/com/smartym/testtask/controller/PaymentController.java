@@ -55,7 +55,7 @@ public class PaymentController {
      * body, so just for sake of time I decided to simplify the solution that way.
      */
     final PaymentRequest paymentRequest = buildDummyPaymentRequest(paymentDTO);
-    paymentService.postPayment(paymentRequest, accessToken);
+    paymentService.doPayment(paymentRequest, accessToken);
 
     return "success";
   }

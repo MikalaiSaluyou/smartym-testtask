@@ -1,5 +1,7 @@
-package com.smartym.testtask;
+package com.smartym.testtask.config;
 
+import com.smartym.testtask.converter.CustomAccessTokenResponseConverter;
+import com.smartym.testtask.converter.CustomRequestEntityConverter;
 import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
